@@ -40,7 +40,7 @@ runs:
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          '**/build/libs/*.jar'
-          'build/libs/*.jar'
+          build/libs/*.jar
+          **/build/libs/*.jar
         tag_name: ${{ steps.bumpTag2.outputs.new_tag }}
         
