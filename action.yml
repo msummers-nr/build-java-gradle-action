@@ -1,16 +1,32 @@
-name: 'Build Java Maven Action'
+name: 'Build Java Gradle Action'
 #
-description:
+description: Build a Java repository using Gradle
+inputs:
+  java_version:
+    description: The Java version to use
+    required: true
+  java_distribution:
+    description: The Java distribution to use
+    required: true
+  gradle_version:
+    description: The Gradle version to use
+    required: true
+
 runs:
   using: "composite"
   steps:
-    - name: Set up JDK 11
+    - name: Set up JDK
       uses: actions/setup-java@v2
       with:
-        java-version: '11'
-        distribution: 'adopt'
-    - name: Build with Maven
-      run: mvn --batch-mode clean package -DskipTests
+        java-version: ${{ inputs.java_version }}
+        distribution: ${{ inputs.java_distribution }}
+
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
+      with:
+        gradle_version: ${{ inputs.gradle_version }}
+    - name: Execute Gradle build
+      run: ./gradlew build
       shell: bash
     - name: Bump version and push tag
       id: bumpTag2
@@ -23,6 +39,6 @@ runs:
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
-        files: '**/target/*.jar'
+        files: '**/build/libs/*.jar'
         tag_name: ${{ steps.bumpTag2.outputs.new_tag }}
         

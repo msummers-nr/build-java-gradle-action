@@ -1,4 +1,4 @@
-# Build Java with Maven GitHub Action
+# Build Java with Gradle GitHub Action
 ## Development
 ### Updating Release
 - Commit local changes
